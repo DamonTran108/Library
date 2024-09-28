@@ -6,7 +6,7 @@ let list = document.querySelector(".listOfBooks");
 
 console.log(list.children);
 
-function Book(title, author, numOfPages, beenRead) {
+function Book(title, author, numOfPages, beenRead, position) {
   this.title = title;
 
   this.author = author;
@@ -14,6 +14,8 @@ function Book(title, author, numOfPages, beenRead) {
   this.numOfPages = numOfPages;
 
   this.beenRead = beenRead;
+
+  this.position = position;
 }
 
 function getAuthor(myLibrary) {
@@ -21,7 +23,7 @@ function getAuthor(myLibrary) {
 }
 
 function getPages(myLibrary) {
-  return myLibrary[myLibrary.length - 1].pages;
+  return myLibrary[myLibrary.length - 1].numOfPages;
 }
 
 function getBeenRead(myLibrary) {
@@ -29,7 +31,22 @@ function getBeenRead(myLibrary) {
 }
 
 function getBookTitle(myLibrary) {
-  return myLibrary[myLibrary.length - 1].bookTitle;
+  return myLibrary[myLibrary.length - 1].title;
+}
+
+function getBookPosition(myLibrary) {
+  return myLibrary[myLibrary.length - 1].position;
+}
+
+function setReadStatus(position) {
+  if (myLibrary[position].beenRead == "false") {
+    myLibrary[position].beenRead = "true";
+
+    console.log("set status to true");
+  } else {
+    myLibrary[position].beenRead = "false";
+    console.log("set status to false");
+  }
 }
 
 function addBookToLibrary() {
@@ -41,12 +58,9 @@ function addBookToLibrary() {
 
   let beenRead = document.querySelector('input[name="beenRead"]:checked').value;
 
-  console.log(bookTitle);
-  console.log(bookAuthor);
-  console.log(numOfPages);
-  console.log(beenRead);
+  let position = myLibrary.length;
 
-  let book = new Book(bookTitle, bookAuthor, numOfPages, beenRead);
+  let book = new Book(bookTitle, bookAuthor, numOfPages, beenRead, position);
 
   myLibrary.push(book);
 }
@@ -58,6 +72,8 @@ function getAllBooks() {
 
   card.style.display = "flex";
 
+  card.style.justifyContent = "center";
+
   card.style.flexDirection = "column";
 
   card.style.alignItems = "center";
@@ -65,6 +81,12 @@ function getAllBooks() {
   let cardTitle = document.createElement("h3");
 
   cardTitle.innerHTML = "Book Name";
+
+  let removeBtn = document.createElement("button");
+
+  removeBtn.textContent = "REMOVE";
+
+  removeBtn.id = myLibrary.length - 1;
 
   let detailsContainer = document.createElement("div");
 
@@ -81,7 +103,10 @@ function getAllBooks() {
   let pages = document.createElement("h4");
 
   let beenReadLabel = document.createElement("label");
+  let beenReadBtn = document.createElement("button");
   let beenRead = document.createElement("h4");
+
+  beenReadBtn.id = myLibrary.length - 1;
 
   authorLabel.textContent = "Author Name:";
   pagesLabel.textContent = "Number Of Pages:";
@@ -101,17 +126,23 @@ function getAllBooks() {
 
   beenReadContainer.display = "flex";
   beenReadContainer.append(beenReadLabel);
+  beenReadContainer.append(beenReadBtn);
   beenReadContainer.append(beenRead);
 
   detailsContainer.append(authorContainer);
   detailsContainer.append(pagesContainer);
   detailsContainer.append(beenReadContainer);
 
+  card.append(removeBtn);
+
+  removeBtn.style.marginLeft = "auto";
+  removeBtn.style.marginTop = "10px";
+  removeBtn.style.marginRight = "10px";
+  removeBtn.style.marginLeft = "10px";
+
   card.append(cardTitle);
 
   card.append(detailsContainer);
-
-  let book = document.createElement("li");
 
   let bookTitle = document.createElement("div");
 
@@ -123,13 +154,41 @@ function getAllBooks() {
 
   beenRead.innerHTML = getBeenRead(myLibrary);
 
-  bookTitle.innerHTML = JSON.stringify(myLibrary[myLibrary.length - 1]);
+  if (getBeenRead(myLibrary) == "false") {
+    beenReadBtn.textContent = "true";
+  } else {
+    beenReadBtn.textContent = "false";
+  }
 
   list.append(card);
 
-  book.appendChild(bookTitle);
+  card.style.marginBottom = "2em";
 
-  list.appendChild(book);
+  removeBtn.addEventListener("click", (event) => {
+    console.log(event.target.id);
+
+    removeBook(event.target.id);
+
+    card.remove(event.target.id);
+
+    console.log(myLibrary);
+  });
+
+  beenReadBtn.addEventListener("click", (event) => {
+    console.log(event.target.id);
+
+    changeReadStatus(event.target.id);
+
+    beenRead.innerHTML = myLibrary[event.target.id].beenRead;
+
+    console.log(myLibrary);
+
+    if (beenRead.textContent == "false") {
+      beenReadBtn.textContent = "true";
+    } else {
+      beenReadBtn.textContent = "false";
+    }
+  });
 }
 
 let addBookBtn = document.querySelector(".addBookBtn");
@@ -142,12 +201,8 @@ let submitBookBtn = document.querySelector(".submitBookBtn");
 
 submitBookBtn.addEventListener("click", (event) => {
   addBookToLibrary();
-  console.log(myLibrary);
 
   form.style.display = "none";
-
-  console.log(list.children);
-  console.log(myLibrary);
 
   document.querySelector(".bookName").value = "";
   document.querySelector(".bookAuthor").value = "";
@@ -158,3 +213,11 @@ submitBookBtn.addEventListener("click", (event) => {
 
   getAllBooks();
 });
+
+function removeBook(position) {
+  myLibrary.splice(position, 1);
+}
+
+function changeReadStatus(position) {
+  setReadStatus(position);
+}
