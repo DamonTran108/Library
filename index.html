@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <script src = "index.js"defer></script>
-    <link rel = "stylesheet" href = "index.css" />
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <script src="index.js" defer></script>
+    <link rel="stylesheet" href="index.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-
+  </head>
+  <body>
     <div>My Books</div>
 
-    <button class = "addBookBtn">Add Book</button>
+    <button class="addBookBtn">Add Book</button>
 
-    <form id = "form">
+    <form id="form">
+      <label for="bookName">Book Name :</label>
+      <input type="text" class="bookName" id="bookName" />
 
-        <label for = "bookName">Book Name :</label>
-        <input type = "text" class = "bookName" id = "bookName"/>
+      <label for="bookName">Author :</label>
+      <input type="text" class="bookAuthor" id="bookAuthor" />
 
-        <label for = "bookName">Author :</label>
-        <input type = "text" class = "bookAuthor" id = "bookAuthor"/>
+      <label for="numOfPages">Number of Pages :</label>
+      <input type="text" class="numOfPages" id="numOfPages" />
 
-        <radio>
+      <div class="radio-container">
+        <input type="radio" id="true" name="beenRead" value="true" />
+        <label for="true">True</label><br />
+        <input type="radio" id="false" name="beenRead" value="false" />
+        <label for="false">False</label><br />
+      </div>
 
-
-        </radio>
-
-        <button class = "submitBookBtn">Submit Book</button>
-
+      <button class="submitBookBtn">Submit Book</button>
     </form>
 
     <h1>List of Books :</h1>
-    <ul class = "listOfBooks"> 
-    </ul>
-    
-</body>
+    <ul class="listOfBooks"></ul>
+  </body>
 </html>
